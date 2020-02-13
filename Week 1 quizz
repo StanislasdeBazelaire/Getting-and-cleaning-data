@@ -1,0 +1,52 @@
+#Week1 lecture examples
+setwd("C:/Users/Stanislas/Datascience/Getting and cleaning data")
+if(!file.exists("data")){dir.create("data")}
+fileUrl<-"http://webstat.banque-france.fr/en/quickviewexport.do?trans=&snapshot=&periodSortOrder=&quickview=1&SERIES_KEY=246.BSI1.M.FR.N.R.A26.A.1.U6.2240.Z01.E&type=csv"
+fileUrl2<-"https://www.aldautomotive.com/Portals/international/Documents/results/Q3%202019%20Quarterly%20series.xlsx?ver=2019-11-05-173744-847"
+download.file(fileUrl2,destfile="C:/Users/Stanislas/Datascience/Getting and cleaning data/data/data.csv",method="auto")
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+#Quizz Week 1 code scripts
+
+#Question1 (csv file)
+setwd("C:/Users/Stanislas/Datascience/Getting and cleaning data")
+if(!file.exists("quizzw1")){dir.create("quizzw1")}
+fileUrl3<-"https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2Fss06hid.csv"
+download.file(fileUrl3,destfile="C:/Users/Stanislas/Datascience/Getting and cleaning data/quizzw1/housingIdaho.csv",method="auto")
+housingdata<-read.table("./quizzw1/housingIdaho.csv",sep=",",header=TRUE)
+library(dplyr)
+nrow(filter(housingdata,VAL==24))
+
+#Question3 (xlsx file)
+#First install the xlsx package
+install.packages("xlsx")
+library("xlsx")
+setwd("C:/Users/Stanislas/Datascience/Getting and cleaning data")
+if(!file.exists("quizzw1")){dir.create("quizzw1")}
+fileUrl4<-"https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2FDATA.gov_NGAP.xlsx"
+download.file(fileUrl4,destfile="C:/Users/Stanislas/Datascience/Getting and cleaning data/quizzw1/naturalgas.xlsx",method="auto",mode="wb")
+col<-7:15
+row<-18:23
+dat<-read.xlsx("./quizzw1/naturalgas.xlsx",sheetIndex=1,colIndex = col, rowIndex = row)
+head(dat)
+
+#Question4
+#First install the xlsx package
+install.packages("XML")
+library("XML")
+fileUrl5 <- "https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2Frestaurants.xml"
+BalResto <- xmlTreeParse(sub("s", "", fileUrl5), useInternal=TRUE)
+rootNode <- xmlRoot(BalResto)
+zip <- xpathSApply(rootNode, "//zipcode", xmlValue)
+sum(zip == 21231)
+
+#Question5
+install.packages("data.table")
+library("data.table")
+setwd("C:/Users/Stanislas/Datascience/Getting and cleaning data")
+if(!file.exists("quizzw1")){dir.create("quizzw1")}
+fileUrl6<-"https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2Fss06pid.csv"
+download.file(fileUrl6,destfile="C:/Users/Stanislas/Datascience/Getting and cleaning data/quizzw1/survey.csv",method="auto")
+DT<-fread("C:/Users/Stanislas/Datascience/Getting and cleaning data/quizzw1/survey.csv")
+
+
+
