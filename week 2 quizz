@@ -1,0 +1,52 @@
+#Question1 (create ajn API with GitHub)
+install.packages("httpuv")
+library("httpuv")
+library("httr")
+#STEP1
+#make own app
+myapp <- oauth_app("github",
+  key = "2061eada24e46ec3cc1f",
+  secret = "2abbbfc12e4f58b78eb8d5d612fb4e8be92a5c40"
+)
+#Get OAuth credentials
+github_token <- oauth2.0_token(oauth_endpoints("github"), myapp)
+#Use API
+gtoken <- config(token = github_token)
+req <- GET("https://api.github.com/users/jtleek/repos", gtoken)
+stop_for_status(req)
+output<-content(req)
+#Find “datasharing”
+datashare <- which(sapply(output, FUN=function(X) "datasharing" %in% X))
+datashare
+#STEP2
+#Find the time that the datasharing repo was created
+list(output[[16]]$name, output[[16]]$created_at)
+
+#Question2 (running SQL statements on R dataframes)
+install.packages("sqldf")
+library("sqldf")
+setwd("C:/Users/Stanislas/Datascience/Getting and cleaning data")
+if(!file.exists("quizzw2")){dir.create("quizzw2")}
+setwd("C:/Users/Stanislas/Datascience/Getting and cleaning data/quizzw2")
+fileUrl7<-"https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2Fss06pid.csv"
+download.file(fileUrl7,destfile="C:/Users/Stanislas/Datascience/Getting and cleaning data/quizzw2/acs.csv",method="auto")
+acs<-read.csv("acs.csv")
+head(acs) 
+sqldf("select pwgtp1 from acs where AGEP < 50")
+
+#Question3 (check whether two outcomes are identical)
+Check<-unique(acs$AGEP)
+B<-sqldf("select distinct AGEP from acs")
+identical(Check,B$AGEP)
+
+#Question4 (number of chqaracters in a given line of an html code)
+htmlUrl<-url("http://biostat.jhsph.edu/~jleek/contact.html")
+htmlCode<-readLines(htmlUrl)
+close(htmlUrl)
+head(htmlCode)
+c(nchar(htmlCode[10]),nchar(htmlCode[20]),nchar(htmlCode[30]),nchar(htmlCode[100]))
+
+#Question5 (read fixed width file format)
+fileUrl<-"https://d396qusza40orc.cloudfront.net/getdata%2Fwksst8110.for"
+SST<-read.fwf(fileUrl, skip=4, widths=c(12, 7, 4, 9, 4, 9, 4, 9, 4))
+sum(SST[,4])
